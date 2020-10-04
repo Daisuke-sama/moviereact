@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
 
   context: path.join(__dirname, 'app'),
   entry: {
-    main: './app'
+    main: './index'
   },
   output: {
     path: path.resolve(__dirname, 'dev'),
@@ -31,11 +31,11 @@ module.exports = {
         use: [
           {
             loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+            },
           },
         ],
-        options: {
-          name: '[path][name].[ext]',
-        },
       },
       {
         test: /.s?css$/,
@@ -50,10 +50,7 @@ module.exports = {
         include: [
           path.resolve(__dirname, 'app')
         ],
-        loader: 'babel-loader',
-        options: {
-          presets: ['es2015']
-        }
+        loader: 'babel-loader'
       }
     ]
   },
@@ -65,18 +62,19 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin(['dev']),
     new webpack.ProvidePlugin({
       _: 'lodash',
-    }),
-    new HtmlWebpackPlugin({
-      title: "Movie App",
-      template: "app/index.html",
-      filename: "index.html",
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[name].css'
+    }),
+    new HtmlWebpackPlugin({
+      title: "Movie App",
+      filename: "index.html",
+    }),
+    new CleanWebpackPlugin({
+      verbose: true,
     }),
     new Dotenv({
       path: './.env'
@@ -85,11 +83,23 @@ module.exports = {
 
   target: 'web',
 
+  stats: {
+    colors: true,
+    reasons: true,
+    hash: true,
+    version: true,
+    timings: true,
+    chunks: true,
+    chunkModules: true,
+    cached: true,
+    cachedAssets: true
+  },
+
   devtool: 'source-map',
   devServer: {
     contentBase: path.join(__dirname, 'dev'),
     compress: true,
-    port: 9000,
+    port: 3000,
     bonjour: true
   },
   watch: false
