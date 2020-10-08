@@ -27,12 +27,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]',
+              name: 'assets/[path][name].[ext]',
             },
           },
         ],
@@ -71,7 +71,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       title: "Movie App",
-      filename: "index.html",
+      template: "index.html"
     }),
     new CleanWebpackPlugin({
       verbose: true,
